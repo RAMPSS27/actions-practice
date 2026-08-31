@@ -1,0 +1,19 @@
+name: My First Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  say-hello:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print a greeting
+        run: echo "Hello from GitHub Actions!"
+
+      - name: Show current date
+        run: date
+
+      - name: List files in this repo
+        run: ls -la
