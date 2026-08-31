@@ -1,0 +1,33 @@
+name: Build and Test
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        run: docker build -t test-image:latest .
+
+      - name: Verify image was built
+        run: docker images test-image
+
+      - name: Run container and test it responds
+        run: |
+          docker run -d -p 5000:5000 --name test-container test-image:latest
+          sleep 5
+          docker ps
+
+      - name: Clean up
+        run: |
+          docker stop test-container
+          docker rm test-container
