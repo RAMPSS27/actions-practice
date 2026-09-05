@@ -27,6 +27,13 @@ jobs:
       - name: Set up kubectl
         uses: azure/setup-kubectl@v4
 
+      - name: Install gke-gcloud-auth-plugin
+        run: |
+          curl -sSL https://sdk.cloud.google.com > /tmp/gcl && bash /tmp/gcl --install-dir=/tmp/gcloud --disable-prompts
+          echo "/tmp/gcloud/google-cloud-sdk/bin" >> $GITHUB_PATH
+          /tmp/gcloud/google-cloud-sdk/bin/gcloud components install gke-gcloud-auth-plugin --quiet
+          echo "USE_GKE_GCLOUD_AUTH_PLUGIN=True" >> $GITHUB_ENV
+
       - name: Configure kubeconfig
         run: |
           mkdir -p ~/.kube
