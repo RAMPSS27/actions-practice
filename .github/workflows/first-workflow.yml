@@ -1,4 +1,4 @@
-name: Build and Push
+name: Build, Push, and Deploy
 
 on:
   push:
@@ -23,3 +23,16 @@ jobs:
 
       - name: Push Docker image
         run: docker push kaivpractice/actions-practice:latest
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v4
+
+      - name: Configure kubeconfig
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > ~/.kube/config
+
+      - name: Deploy to Kubernetes
+        run: |
+          kubectl create deployment actions-practice-deployment --image=kaivpractice/actions-practice:latest --dry-run=client -o yaml | kubectl apply -f -
+          kubectl rollout status deployment/actions-practice-deployment
