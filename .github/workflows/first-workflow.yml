@@ -58,4 +58,13 @@ jobs:
             --from-literal=DB_USER=postgres \
             --from-literal=DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
             --dry-run=client -o yaml | kubectl apply -f -
-      
+            - name: Wait for rollout and verify health
+        run: |
+          kubectl rollout status deployment/actions-practice-deployment --timeout=90s
+
+      - name: Rollback on failure
+        if: failure()
+        run: |
+          echo "Deployment failed or timed out — rolling back to previous version"
+          kubectl rollout undo deployment/actions-practice-deployment
+          kubectl rollout status deployment/actions-practice-deployment
