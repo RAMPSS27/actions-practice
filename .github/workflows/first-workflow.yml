@@ -55,6 +55,9 @@ jobs:
             --from-literal=DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
             --dry-run=client -o yaml | kubectl apply -f -
 
+      - name: Remove old deployment (clean slate)
+        run: kubectl delete deployment actions-practice-deployment --ignore-not-found=true
+
       - name: Deploy to Kubernetes
         run:  kubectl apply -f k8s-deployment.yaml
           
