@@ -56,8 +56,8 @@ jobs:
             --dry-run=client -o yaml | kubectl apply -f -
 
       - name: Deploy to Kubernetes
-        run: |
-          kubectl create deployment actions-practice-deployment --image=kaivpractice/actions-practice:latest --dry-run=client -o yaml | kubectl apply -f -
+        run:  kubectl apply -f k8s-deployment.yaml
+          
 
       - name: Wait for rollout and verify health
         run: kubectl rollout status deployment/actions-practice-deployment --timeout=90s
