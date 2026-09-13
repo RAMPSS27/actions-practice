@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: actions-practice-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: actions-practice
+  template:
+    metadata:
+      labels:
+        app: actions-practice
+    spec:
+      containers:
+        - name: actions-practice-container
+          image: kaivpractice/actions-practice:latest
+          ports:
+            - containerPort: 5000
